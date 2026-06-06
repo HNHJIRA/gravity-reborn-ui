@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
+import { outfits } from "@/mock/virtual-try-data";
 import { ContainerWrapper } from "@/components/ui/wrapper/container-wrapper";
 import { SectionWrapper } from "@/components/ui/wrapper/section-wrapper";
 import { EyebrowText } from "@/components/ui/text/eye-brow-text";
@@ -22,19 +23,13 @@ const VirtualTryUpload = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch garments from backend
-    const fetchGarments = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/virtual-try-outfit");
-        if (res.ok) {
-          const data = await res.json();
-          setGarments(data.data || []);
-        }
-      } catch (err) {
-        console.error("Failed to load garments", err);
-      }
-    };
-    fetchGarments();
+    const mockGarments = outfits.map((o, idx) => ({
+      id: idx + 1,
+      title: o.title,
+      category: o.sub,
+      imageUrl: o.img,
+    }));
+    setGarments(mockGarments);
   }, []);
 
   const handleHumanImageSelect = async (e) => {
