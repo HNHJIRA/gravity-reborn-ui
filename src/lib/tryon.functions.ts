@@ -7,28 +7,75 @@ const Input = z.object({
   description: z.string().optional().default(""),
 });
 
+// Convert a remote image URL (or data URL) to a data URL so the model always
+// receives inline image bytes.
+async function toDataUrl(src: string): Promise<string> {
+  if (src.startsWith("data:")) return src;
+  const res = await fetch(src);
+  if (!res.ok) throw new Error(`Failed to fetch image: ${src}`);
+  const contentType = res.headers.get("content-type") || "image/jpeg";
+  const buf = new Uint8Array(await res.arrayBuffer());
+  let bin = "";
+  for (let i = 0; i < buf.length; i++) bin += String.fromCharCode(buf[i]);
+  const b64 = btoa(bin);
+  return `data:${contentType};base64,${b64}`;
+}
+
 export const runVirtualTryOn = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => Input.parse(data))
   .handler(async ({ data }) => {
-    const key = process.env.FAL_KEY;
-    if (!key) throw new Error("FAL_KEY is not configured");
+    const key = process.env.LOVABLE_API_KEY;
+    if (!key) throw new Error("LOVABLE_API_KEY is not configured");
 
-    const res = await fetch("https://fal.run/fal-ai/fashn/tryon/v1.6", {
+    const [humanDataUrl, garmentDataUrl] = await Promise.all([
+      toDataUrl(data.human_image_url),
+      toDataUrl(data.garment_image_url),
+    ]);
+
+    const prompt = `You are a virtual try-on assistant. The FIRST image is a person. The SECOND image is a garment (${data.description || "clothing item"}). Generate a single photorealistic image of the SAME person wearing this exact garment. Preserve the person's face, identity, body, pose, skin tone, and background. Only replace the relevant clothing item with the garment shown. The garment must match the style, color, pattern, and shape of the second image precisely. Output: one image only.`;
+
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Key ${key}`,
+        Authorization: `Bearer ${key}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model_image: data.human_image_url,
-        garment_image: data.garment_image_url,
-        category: "auto",
+        model: "google/gemini-2.5-flash-image-preview",
+        messages: [
+          {
+            role: "user",
+            content: [
+              { type: "text", text: prompt },
+              { type: "image_url", image_url: { url: humanDataUrl } },
+              { type: "image_url", image_url: { url: garmentDataUrl } },
+            ],
+          },
+        ],
+        modalities: ["image", "text"],
       }),
     });
 
-    const json: any = await res.json();
     if (!res.ok) {
-      return { success: false, error: json?.detail || json?.error || `Fal error ${res.status}` };
+      const errText = await res.text();
+      if (res.status === 429) {
+        return { success: false, error: "Rate limit hit. Please wait and try again." };
+      }
+      if (res.status === 402) {
+        return { success: false, error: "AI credits exhausted. Add credits in Settings → Workspace → Usage." };
+      }
+      return { success: false, error: `AI error ${res.status}: ${errText.slice(0, 200)}` };
     }
-    return { success: true, data: json };
+
+    const json: any = await res.json();
+    const message = json?.choices?.[0]?.message;
+    const imageUrl =
+      message?.images?.[0]?.image_url?.url ||
+      message?.images?.[0]?.url ||
+      null;
+
+    if (!imageUrl) {
+      return { success: false, error: "No image returned from the AI." };
+    }
+    return { success: true, data: { image: { url: imageUrl } } };
   });
