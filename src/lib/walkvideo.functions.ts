@@ -5,85 +5,113 @@ const Input = z.object({
   image_url: z.string().min(1),
 });
 
-// Use Fal queue API to submit an image-to-video job and poll until done.
-// Model: Kling 1.6 image-to-video (good motion + identity preservation).
-const MODEL = "fal-ai/kling-video/v1.6/standard/image-to-video";
+async function toDataUrl(src: string): Promise<string> {
+  if (src.startsWith("data:")) return src;
+  const res = await fetch(src);
+  if (!res.ok) throw new Error(`Failed to fetch image: ${src}`);
+  const contentType = res.headers.get("content-type") || "image/jpeg";
+  const buf = new Uint8Array(await res.arrayBuffer());
+  let bin = "";
+  for (let i = 0; i < buf.length; i++) bin += String.fromCharCode(buf[i]);
+  const b64 = btoa(bin);
+  return `data:${contentType};base64,${b64}`;
+}
+
+const ANGLES = [
+  {
+    key: "front",
+    prompt:
+      "Generate the SAME person wearing the SAME exact outfit, full body, standing naturally, photographed from the FRONT. Identical face, identical garment color/pattern/fit, identical background and lighting. Photorealistic.",
+  },
+  {
+    key: "right",
+    prompt:
+      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from the RIGHT SIDE PROFILE (90° rotation). Identical face, identical garment color/pattern/fit, identical background and lighting. Photorealistic.",
+  },
+  {
+    key: "back",
+    prompt:
+      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from BEHIND (back view, 180° rotation). Show the back of the garment in detail. Identical hair, identical garment color/pattern/fit, identical background and lighting. Photorealistic.",
+  },
+  {
+    key: "left",
+    prompt:
+      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from the LEFT SIDE PROFILE (270° rotation). Identical face, identical garment color/pattern/fit, identical background and lighting. Photorealistic.",
+  },
+];
+
+async function generateAngle(key: string, prompt: string, imageDataUrl: string) {
+  const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "google/gemini-2.5-flash-image-preview",
+      messages: [
+        {
+          role: "user",
+          content: [
+            { type: "text", text: prompt },
+            { type: "image_url", image_url: { url: imageDataUrl } },
+          ],
+        },
+      ],
+      modalities: ["image", "text"],
+    }),
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`AI error ${res.status}: ${errText.slice(0, 200)}`);
+  }
+  const json: any = await res.json();
+  const message = json?.choices?.[0]?.message;
+  const url =
+    message?.images?.[0]?.image_url?.url ||
+    message?.images?.[0]?.url ||
+    null;
+  if (!url) throw new Error("No image returned for angle");
+  return url as string;
+}
 
 export const generateWalkVideo = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => Input.parse(data))
   .handler(async ({ data }) => {
-    const key = process.env.FAL_KEY;
+    const key = process.env.LOVABLE_API_KEY;
     if (!key) {
-      return { success: false, error: "FAL_KEY is not configured." };
+      return { success: false, error: "LOVABLE_API_KEY is not configured." };
     }
 
-    const prompt =
-      "The person walks forward naturally with a confident catwalk stride. The camera smoothly orbits 360 degrees around the person, showing them from the front, side, and back so the full outfit is visible from every angle. Cinematic lighting, photorealistic, sharp focus on the outfit, stable smooth motion.";
+    try {
+      const dataUrl = await toDataUrl(data.image_url);
 
-    // 1. Submit job
-    const submitRes = await fetch(`https://queue.fal.run/${MODEL}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Key ${key}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt,
-        image_url: data.image_url,
-        duration: "5",
-        aspect_ratio: "9:16",
-      }),
-    });
-
-    if (!submitRes.ok) {
-      const txt = await submitRes.text();
-      console.error("Fal submit failed", submitRes.status, txt);
-      if (submitRes.status === 401 || submitRes.status === 403) {
-        return { success: false, error: `Fal auth failed (${submitRes.status}): ${txt.slice(0, 200)}` };
-      }
-      if (txt.toLowerCase().includes("exhausted") || submitRes.status === 402) {
-        return { success: false, error: "Fal credits exhausted. Top up at fal.ai/dashboard/billing." };
-      }
-      return { success: false, error: `Fal submit error ${submitRes.status}: ${txt.slice(0, 200)}` };
-    }
-
-    const submitJson: any = await submitRes.json();
-    const requestId: string | undefined = submitJson?.request_id;
-    const statusUrl: string | undefined = submitJson?.status_url;
-    const responseUrl: string | undefined = submitJson?.response_url;
-    if (!requestId || !statusUrl || !responseUrl) {
-      return { success: false, error: "Fal did not return a request id." };
-    }
-
-    // 2. Poll for completion (max ~3 minutes)
-    const start = Date.now();
-    const maxMs = 3 * 60 * 1000;
-    while (Date.now() - start < maxMs) {
-      await new Promise((r) => setTimeout(r, 4000));
-      const statusRes = await fetch(statusUrl, {
-        headers: { Authorization: `Key ${key}` },
-      });
-      if (!statusRes.ok) continue;
-      const statusJson: any = await statusRes.json();
-      const status = statusJson?.status;
-      if (status === "COMPLETED") {
-        const finalRes = await fetch(responseUrl, {
-          headers: { Authorization: `Key ${key}` },
-        });
-        if (!finalRes.ok) {
-          return { success: false, error: "Failed to fetch Fal result." };
+      const frames: string[] = [];
+      // Generate sequentially to avoid hitting rate limits
+      for (const a of ANGLES) {
+        try {
+          const url = await generateAngle(key, a.prompt, dataUrl);
+          frames.push(url);
+        } catch (e: any) {
+          const msg = String(e?.message || e);
+          if (msg.includes("429")) {
+            return { success: false, error: "Rate limit hit. Please wait a moment and try again." };
+          }
+          if (msg.includes("402")) {
+            return { success: false, error: "AI credits exhausted. Add credits in Settings → Workspace → Usage." };
+          }
+          console.error("angle failed", a.key, msg);
         }
-        const finalJson: any = await finalRes.json();
-        const videoUrl = finalJson?.video?.url || finalJson?.video_url || null;
-        if (!videoUrl) {
-          return { success: false, error: "Fal returned no video URL." };
-        }
-        return { success: true, video_url: videoUrl };
       }
-      if (status === "FAILED" || status === "ERROR") {
-        return { success: false, error: "Video generation failed on Fal." };
-      }
-    }
 
-    return { success: false, error: "Video generation timed out. Try again." };
+      if (frames.length === 0) {
+        return { success: false, error: "Failed to generate any angle frames." };
+      }
+
+      return { success: true, frames };
+    } catch (err: any) {
+      console.error(err);
+      return { success: false, error: err?.message || "Unknown error generating walkaround." };
+    }
   });
