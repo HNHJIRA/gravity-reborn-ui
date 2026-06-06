@@ -1,0 +1,51 @@
+
+export const features = [
+    {
+        id: 1,
+        type: "text",
+        number: "01",
+        title: "Quiet Hours Offer",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna..",
+        image: "/images/home/card/card1.webp",
+    },
+    {
+        id: 2,
+        type: "text",
+        number: "02",
+        title: "Quiet Hours Offer",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna..",
+        image: "/images/home/card/card2.webp",
+    },
+    {
+        id: 3,
+        type: "text",
+        number: "03",
+        title: "Quiet Hours Offer",
+        desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna..",
+        image: "/images/home/card/card3.webp",
+    },
+    {
+        id: 4,
+        type: "text",
+        number: "04",
+        title: "Free Consultation",
+        desc: "Book a complimentary session with our expert stylists to find the perfect ensemble for your special day.",
+        image: "/images/home/card/card3.webp",
+    },
+    {
+        id: 5,
+        type: "text",
+        number: "05",
+        title: "Special Gifts",
+        desc: "Receive exclusive gifts with your purchase as a token of our appreciation for choosing Victor Design.",
+        image: "/images/home/card/card2.webp",
+    },
+    {
+        id: 6,
+        type: "text",
+        number: "06",
+        title: "Special Gifts",
+        desc: "Receive exclusive gifts with your purchase as a token of our appreciation for choosing Victor Design.",
+        image: "/images/home/card/card1.webp",
+    },
+];
