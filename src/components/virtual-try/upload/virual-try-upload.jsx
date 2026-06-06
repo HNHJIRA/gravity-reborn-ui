@@ -1,10 +1,12 @@
 
 import React, { useState, useEffect, useRef } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { outfits } from "@/mock/virtual-try-data";
 import { ContainerWrapper } from "@/components/ui/wrapper/container-wrapper";
 import { SectionWrapper } from "@/components/ui/wrapper/section-wrapper";
 import { EyebrowText } from "@/components/ui/text/eye-brow-text";
 import { HeadingText } from "@/components/ui/text/heading-text";
+import { runVirtualTryOn } from "@/lib/tryon.functions";
 import UploadCard1 from "./upload-card1";
 import UploadCard2 from "./upload-card2";
 import UploadCard3 from "./upload-card3";
