@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
+import { outfits } from "@/mock/virtual-try-data";
 import { ContainerWrapper } from "@/components/ui/wrapper/container-wrapper";
 import { SectionWrapper } from "@/components/ui/wrapper/section-wrapper";
 import { EyebrowText } from "@/components/ui/text/eye-brow-text";
