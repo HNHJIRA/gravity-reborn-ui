@@ -63,14 +63,30 @@ export default function ShopCollectionContent({ activeCategory }) {
     );
   }
 
-  if (error) {
+  if (!filteredProducts.length) {
     return (
-      <div className="w-full py-16 flex flex-col items-center justify-center text-center">
-        <div className="w-12 h-12 rounded-full border border-red-500/20 bg-red-500/5 flex items-center justify-center text-red-500 mb-4">
-          <SlidersHorizontal size={20} />
+      <div className="w-full">
+        <div className="flex justify-between items-center border-y border-white/10 py-4 my-6">
+          <ParagraphText text="0 pieces" className="text-white font-medium" />
+          <div className="flex items-center gap-2 cursor-pointer">
+            <SlidersHorizontal size={20} color="#A3A3A3" />
+            <ParagraphText text="Newest" className="text-white" />
+          </div>
         </div>
-        <ParagraphText text={`Error connection: ${error}`} className="text-red-400 font-semibold" />
-        <p className="text-muted-foreground text-xs mt-2">Could not sync catalog from live server.</p>
+        <div className="flex flex-col items-center justify-center py-20 px-6 border border-white/5 bg-[#08080c]/80 backdrop-blur-md text-center max-w-xl mx-auto my-12 shadow-[0_8px_30px_rgb(0,0,0,0.5)]">
+          <div className="w-16 h-16 rounded-full border border-primary/20 bg-primary/5 flex items-center justify-center text-primary/70 mb-6 shadow-[0_0_15px_rgba(212,175,55,0.1)]">
+            <ShoppingBag size={24} />
+          </div>
+          <h3 className="text-white font-medium text-base tracking-widest mb-3 uppercase">
+            No Couture Pieces Available
+          </h3>
+          <p className="text-muted-foreground text-[11px] leading-relaxed max-w-xs mb-1">
+            Our digital showroom is currently being curated.
+          </p>
+          <p className="text-primary/70 text-[10px] tracking-widest uppercase italic">
+            Please add exquisite custom pieces through the Admin Panel.
+          </p>
+        </div>
       </div>
     );
   }
