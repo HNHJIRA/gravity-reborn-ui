@@ -10,6 +10,7 @@ import { runVirtualTryOn } from "@/lib/tryon.functions";
 import UploadCard1 from "./upload-card1";
 import UploadCard2 from "./upload-card2";
 import UploadCard3 from "./upload-card3";
+import UploadCard4 from "./upload-card4";
 
 const VirtualTryUpload = () => {
   const tryOnFn = useServerFn(runVirtualTryOn);
