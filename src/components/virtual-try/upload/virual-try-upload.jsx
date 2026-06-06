@@ -76,10 +76,11 @@ const VirtualTryUpload = () => {
     setResultImage(null);
 
     try {
+      const garmentDataUrl = await urlToDataUrl(selectedGarment.imageUrl);
       const data = await tryOnFn({
         data: {
           human_image_url: humanImageUrl,
-          garment_image_url: selectedGarment.imageUrl,
+          garment_image_url: garmentDataUrl,
           description: `${selectedGarment.category || ""} ${selectedGarment.title || ""}`.trim(),
         },
       });
