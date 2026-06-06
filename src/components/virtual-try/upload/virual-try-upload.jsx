@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { ContainerWrapper } from "@/components/ui/wrapper/container-wrapper";

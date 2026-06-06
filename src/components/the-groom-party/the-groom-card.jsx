@@ -1,4 +1,3 @@
-"use client";
 import { silhouettes } from "@/mock/design-lab";
 import { SelectionCard } from "../ui/cards/selection-card";
 import { ParagraphText } from "../ui/text/paragraph-text";

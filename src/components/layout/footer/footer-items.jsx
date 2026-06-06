@@ -1,5 +1,5 @@
 import { HeadingText } from "@/components/ui/text/heading-text";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 
 export function FooterItems({ data, title }) {
   return (

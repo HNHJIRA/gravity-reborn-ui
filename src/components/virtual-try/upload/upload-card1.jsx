@@ -2,7 +2,6 @@ import { Upload, Camera, Loader2 } from "lucide-react";
 import { HeadingText } from "@/components/ui/text/heading-text";
 import { ParagraphText } from "@/components/ui/text/paragraph-text";
 import { useRef } from "react";
-import Image from "next/image";
 
 const UploadCard1 = ({ humanImagePreview, uploadingHuman, onSelectFile }) => {
   const fileInputRef = useRef(null);

@@ -1,4 +1,3 @@
-"use client";
 import { StepperContent } from "@/components/reui/stepper";
 import { EyebrowText } from "@/components/ui/text/eye-brow-text";
 import { HeadingText } from "@/components/ui/text/heading-text";

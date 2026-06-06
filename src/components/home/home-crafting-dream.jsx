@@ -1,5 +1,4 @@
 import { stats } from "@/mock/legacy";
-import Image from "next/image";
 import { ParagraphText } from "../ui/text/paragraph-text";
 import { SectionWrapper } from "../ui/wrapper/section-wrapper";
 import { ContainerWrapper } from "../ui/wrapper/container-wrapper";
@@ -47,7 +46,7 @@ export default function HomeCraftingDream() {
           </div>
           <div className="lg:w-1/2 relative">
             <div className="relative w-full h-[560px]">
-              <Image
+              <img
                 src="/images/home/crafting-dream/dream1.webp"
                 alt="Master Craftsman"
                 fill
@@ -55,7 +54,7 @@ export default function HomeCraftingDream() {
               />
             </div>
             <div className="absolute bottom-6 -left-10 w-48 h-64">
-              <Image
+              <img
                 src="/images/home/crafting-dream/dream2.webp"
                 alt="Master Craftsman"
                 fill

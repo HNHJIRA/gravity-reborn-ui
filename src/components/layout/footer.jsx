@@ -1,5 +1,4 @@
-import Link from "next/link";
-import Image from "next/image";
+import { Link } from "@tanstack/react-router";
 import { footerMenu, socialIcons, websiteInfo } from "@/mock/navigation-menu";
 import { ParagraphText } from "../ui/text/paragraph-text";
 import { ContainerWrapper } from "../ui/wrapper/container-wrapper";
@@ -14,8 +13,8 @@ export default function Footer() {
         <ContainerWrapper>
           <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-10">
             <div className="space-y-10">
-              <Link href={websiteInfo.link} className="shrink-0">
-                <Image
+              <Link to={websiteInfo.link} className="shrink-0">
+                <img
                   src={websiteInfo.logo}
                   alt={websiteInfo.alt}
                   width={150}
@@ -35,10 +34,10 @@ export default function Footer() {
           <div className="text-muted-foreground text-sm flex flex-col md:flex-row justify-between items-center">
             <ParagraphText text="&copy; 2026 VictorDesign. All rights reserved." />
             <div className="flex gap-6">
-              <Link href="#" className="hover:text-primary transition-colors">
+              <Link to="#" className="hover:text-primary transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="#" className="hover:text-primary transition-colors">
+              <Link to="#" className="hover:text-primary transition-colors">
                 Terms of Service
               </Link>
             </div>

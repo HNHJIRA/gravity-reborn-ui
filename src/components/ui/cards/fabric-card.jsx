@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { HeadingText } from "../text/heading-text";
 
 export function FabricCard({ title, img, active, onClick }) {
@@ -10,7 +9,7 @@ export function FabricCard({ title, img, active, onClick }) {
       <div
         className={`relative w-full aspect-square overflow-hidden border-2 ${active ? "border-primary" : "border-transparent"}`}
       >
-        <Image
+        <img
           src={img}
           alt={title}
           fill

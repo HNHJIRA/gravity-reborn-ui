@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Button } from "../ui/button";
 import { Upload, Wand2, Eye, Camera, RefreshCcw, Download } from "lucide-react";
 import { StepInfoCard } from "../ui/cards/step-info-card";
@@ -26,7 +25,7 @@ export default function HomeVirtualTryOn() {
           <div className="border-2 border-red-600 rounded-xl p-3">
             <div className="relative grid grid-cols-1 border-2 border-primary rounded-xl overflow-hidden">
               <div className="absolute inset-0 bg-black/40 z-10"></div>
-              <Image
+              <img
                 src="/images/home/virtual-try/virtual-try1.webp"
                 alt="Virtual Try-On"
                 width={400}
@@ -34,7 +33,7 @@ export default function HomeVirtualTryOn() {
                 className="object-cover object-top w-full md:h-[300px] h-[200px]"
                 loading="lazy"
               />
-              <Image
+              <img
                 src="/images/home/virtual-try/virtual-try2.webp"
                 alt="Virtual Try-On"
                 width={400}

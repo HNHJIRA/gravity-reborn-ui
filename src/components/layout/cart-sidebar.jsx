@@ -1,8 +1,6 @@
-"use client";
 import React, { useState } from "react";
 import { X, Plus, Minus, Trash2, ShoppingBag, ShieldCheck } from "lucide-react";
 import { useCart } from "@/context/cart-context";
-import Image from "next/image";
 
 export default function CartSidebar() {
   const {
@@ -102,7 +100,7 @@ export default function CartSidebar() {
                   className="flex gap-4 p-4 border border-primary/10 bg-zinc-900/30 rounded-xl relative group"
                 >
                   <div className="relative w-20 aspect-3/4 rounded overflow-hidden border border-white/10 shrink-0">
-                    <Image
+                    <img
                       src={item.img}
                       alt={item.title}
                       fill

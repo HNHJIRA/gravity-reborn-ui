@@ -1,11 +1,10 @@
-"use client";
 import React, { useState } from "react";
 import { SectionWrapper } from "../ui/wrapper/section-wrapper";
 import { ContainerWrapper } from "../ui/wrapper/container-wrapper";
 import { HeadingText } from "../ui/text/heading-text";
 import { ParagraphText } from "../ui/text/paragraph-text";
 import { Heart, Crown, Gem, Sparkles, Award, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 
 export default function HomeFilterByEvent() {
   const [hoveredIndex, setHoveredIndex] = useState(null);

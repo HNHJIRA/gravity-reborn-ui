@@ -1,5 +1,4 @@
-import Link from "next/link";
-import Image from "next/image";
+import { Link } from "@tanstack/react-router";
 import {
   Sheet,
   SheetContent,
@@ -30,8 +29,8 @@ export function NavbarMobile() {
         <div className="flex flex-col h-full">
           <SheetHeader className="p-6 border-b border-white/10">
             <SheetTitle className="text-left">
-              <Link href={websiteInfo.link} className="block w-fit">
-                <Image
+              <Link to={websiteInfo.link} className="block w-fit">
+                <img
                   src={websiteInfo.logo}
                   alt={websiteInfo.alt}
                   width={120}

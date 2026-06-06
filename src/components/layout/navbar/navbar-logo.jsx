@@ -1,11 +1,10 @@
-import Link from "next/link";
-import Image from "next/image";
+import { Link } from "@tanstack/react-router";
 import { websiteInfo } from "@/mock/navigation-menu";
 
 export function NavbarLogo() {
   return (
-    <Link href={websiteInfo.link} className="shrink-0 relative z-50">
-      <Image
+    <Link to={websiteInfo.link} className="shrink-0 relative z-50">
+      <img
         src={websiteInfo.logo}
         alt={websiteInfo.alt}
         width={150}

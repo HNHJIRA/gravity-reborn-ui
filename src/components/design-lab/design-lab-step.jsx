@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import { Stepper, StepperPanel } from "@/components/reui/stepper";
 import { SectionWrapper } from "../ui/wrapper/section-wrapper";

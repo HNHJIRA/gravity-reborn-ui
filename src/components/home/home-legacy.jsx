@@ -1,6 +1,5 @@
 import { stats } from "@/mock/legacy";
-import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { ParagraphText } from "../ui/text/paragraph-text";
 import { SectionWrapper } from "../ui/wrapper/section-wrapper";
 import { ContainerWrapper } from "../ui/wrapper/container-wrapper";
@@ -48,7 +47,7 @@ export default function HomeLegacy() {
           </div>
           <div className="lg:w-1/2 relative h-[600px] w-full">
             <div className="relative w-full h-full z-10 p-4">
-              <Image
+              <img
                 src="/images/home/legacy/legacy-right.webp"
                 alt="Master Craftsman"
                 fill

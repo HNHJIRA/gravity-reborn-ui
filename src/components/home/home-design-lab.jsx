@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Button } from "../ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import BgOverlay from "../ui/overlay/bg-overlay";
@@ -54,7 +53,7 @@ export default function HomeDesignLab() {
 
           <div className="relative md:h-[600px] h-[400px] w-full border border-white/10 p-4">
             <div className="relative w-full h-full transition-all duration-700">
-              <Image
+              <img
                 src="/images/home/design-lab/design-lab-right.webp"
                 alt="Tailoring Process"
                 fill

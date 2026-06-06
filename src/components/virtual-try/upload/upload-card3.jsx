@@ -2,7 +2,6 @@ import { Eye, Loader2, Download, AlertTriangle } from "lucide-react";
 import { HeadingText } from "@/components/ui/text/heading-text";
 import { ParagraphText } from "@/components/ui/text/paragraph-text";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 
 const UploadCard3 = ({ resultImage, generating, error, onTryOn, canTryOn }) => {
   return (

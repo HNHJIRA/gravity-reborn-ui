@@ -1,9 +1,7 @@
-"use client";
 import { useState } from "react";
 import { Card, CardContent, CardFooter } from "../card";
 import { ParagraphText } from "../text/paragraph-text";
-import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { ZoomIn, ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 
@@ -28,7 +26,7 @@ export function ShopCard({ item }) {
 
   return (
     <Card className="bg-transparent border-none group cursor-pointer py-0">
-      <Link href={`/shop-collection/${item.id}`} className="block">
+      <Link to={`/shop-collection/${item.id}`} className="block">
         <CardContent className="p-0 relative overflow-hidden border border-primary/40 group-hover:border-primary transition-all duration-300">
           <div className="absolute top-4 left-4 z-10 bg-gradient-gold text-black text-[10px] font-bold px-3 py-1 tracking-tighter">
             {item.tag}
@@ -42,7 +40,7 @@ export function ShopCard({ item }) {
           </div>
 
           <div className="relative aspect-3/4 bg-zinc-900 overflow-hidden">
-            <Image
+            <img
               src={item.img}
               alt={item.title}
               fill
@@ -52,7 +50,7 @@ export function ShopCard({ item }) {
         </CardContent>
       </Link>
       <CardFooter className="flex flex-col items-start p-0 gap-2 mt-3">
-        <Link href={`/shop-collection/${item.id}`} className="block w-full">
+        <Link to={`/shop-collection/${item.id}`} className="block w-full">
           <div className="flex justify-between w-full">
             <ParagraphText
               text={item.title}

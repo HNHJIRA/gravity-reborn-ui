@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Card } from "../card";
 import { Check } from "lucide-react";
 import { EyebrowText } from "../text/eye-brow-text";
@@ -12,7 +11,7 @@ export function SelectionCard({ title, sub, desc, img, active, onClick }) {
       className={`relative group h-[450px] py-0 overflow-hidden cursor-pointer rounded-none border-2 ${active ? "border-primary" : "border-transparent"}`}
     >
       <div className="relative w-full h-full">
-        <Image
+        <img
           src={img}
           alt={title}
           fill

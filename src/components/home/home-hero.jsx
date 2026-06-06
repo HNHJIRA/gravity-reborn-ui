@@ -1,5 +1,4 @@
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
 import BgOverlay from "../ui/overlay/bg-overlay";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
@@ -69,7 +68,7 @@ export default function HomeHero() {
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 md:block hidden">
             <div className="flex items-center">
               <div className="w-24 h-px bg-gradient-gold"></div>
-              <Image
+              <img
                 src="/images/home/triangle.webp"
                 alt="Triangle Image"
                 width={30}

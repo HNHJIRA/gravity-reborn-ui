@@ -1,6 +1,5 @@
 import { HeadingText } from "@/components/ui/text/heading-text";
 import { ParagraphText } from "@/components/ui/text/paragraph-text";
-import Image from "next/image";
 
 const UploadCard2 = ({ garments, selectedGarment, onSelectGarment }) => {
   return (
@@ -34,7 +33,7 @@ const UploadCard2 = ({ garments, selectedGarment, onSelectGarment }) => {
                   }`}
                 >
                   <div className="relative w-full h-full overflow-hidden bg-zinc-900">
-                    <Image
+                    <img
                       src={item.imageUrl}
                       alt={item.title}
                       fill

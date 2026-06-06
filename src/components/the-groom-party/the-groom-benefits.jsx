@@ -1,4 +1,3 @@
-"use client";
 import { HeadingText } from "../ui/text/heading-text";
 import { ContainerWrapper } from "../ui/wrapper/container-wrapper";
 import { SectionWrapper } from "../ui/wrapper/section-wrapper";

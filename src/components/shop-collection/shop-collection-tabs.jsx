@@ -1,4 +1,3 @@
-"use client";
 import { useState, useEffect, useMemo } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SectionWrapper } from "../ui/wrapper/section-wrapper";

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { usePathname } from "next/navigation";
 
 export function NavbarDesktopItem({ item, isLast }) {

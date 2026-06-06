@@ -1,5 +1,4 @@
 import { Calendar, Clock } from "lucide-react";
-import Image from "next/image";
 import { ParagraphText } from "../text/paragraph-text";
 import { HeadingText } from "../text/heading-text";
 
@@ -8,7 +7,7 @@ export function ArticlesCard({ img, cat, date, read, title }) {
     <>
       <div className="group space-y-4">
         <div className="relative overflow-hidden aspect-video border border-zinc-900 group">
-          <Image
+          <img
             src={img}
             alt={cat}
             fill

@@ -1,11 +1,10 @@
 import { Calendar, Clock } from "lucide-react";
 import { SectionWrapper } from "../ui/wrapper/section-wrapper";
 import { ContainerWrapper } from "../ui/wrapper/container-wrapper";
-import Image from "next/image";
 import { EyebrowText } from "../ui/text/eye-brow-text";
 import { HeadingText } from "../ui/text/heading-text";
 import { ParagraphText } from "../ui/text/paragraph-text";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 
 const HeritageBlogFeatured = () => {
   return (
@@ -15,7 +14,7 @@ const HeritageBlogFeatured = () => {
           <EyebrowText text="Featured Story" align="center" className="mb-10" />
           <div className="flex flex-col md:flex-row overflow-hidden">
             <div className="md:w-1/2 relative group min-h-[400px]">
-              <Image
+              <img
                 src="/images/home/crafting-dream/dream2.webp"
                 alt="Saree"
                 fill

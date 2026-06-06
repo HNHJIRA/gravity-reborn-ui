@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {
   Carousel,
   CarouselContent,
@@ -14,7 +13,7 @@ export default function HomeCarousel() {
         {Array.from({ length: 3 }).map((_, index) => (
           <CarouselItem key={index}>
             <div className="grid grid-cols-2 gap-4 p-2">
-              <Image
+              <img
                 src="/images/home/carousel/carousel1.webp"
                 alt="Carousel Image 1"
                 width={300}
@@ -22,7 +21,7 @@ export default function HomeCarousel() {
                 className="w-full h-auto rounded-lg object-cover"
                 loading="lazy"
               />
-              <Image
+              <img
                 src="/images/home/carousel/carousel2.webp"
                 alt="Carousel Image 2"
                 width={300}

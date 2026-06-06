@@ -1,4 +1,3 @@
-"use client";
 import { ContainerWrapper } from "../ui/wrapper/container-wrapper";
 import { NavbarDesktop } from "./navbar/navbar-desktop";
 import { NavbarLogo } from "./navbar/navbar-logo";

@@ -1,4 +1,3 @@
-"use client";
 import { ArrowRight } from "lucide-react";
 import { ContainerWrapper } from "../ui/wrapper/container-wrapper";
 import { SectionWrapper } from "../ui/wrapper/section-wrapper";

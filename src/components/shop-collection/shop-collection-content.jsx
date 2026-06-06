@@ -1,4 +1,3 @@
-"use client";
 import { useState, useEffect } from "react";
 import { TabsContent } from "@/components/ui/tabs";
 import { ParagraphText } from "../ui/text/paragraph-text";
