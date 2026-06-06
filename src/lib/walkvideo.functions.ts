@@ -37,8 +37,9 @@ export const generateWalkVideo = createServerFn({ method: "POST" })
 
     if (!submitRes.ok) {
       const txt = await submitRes.text();
+      console.error("Fal submit failed", submitRes.status, txt);
       if (submitRes.status === 401 || submitRes.status === 403) {
-        return { success: false, error: "Fal authentication failed. Check FAL_KEY." };
+        return { success: false, error: `Fal auth failed (${submitRes.status}): ${txt.slice(0, 200)}` };
       }
       if (txt.toLowerCase().includes("exhausted") || submitRes.status === 402) {
         return { success: false, error: "Fal credits exhausted. Top up at fal.ai/dashboard/billing." };
