@@ -34,12 +34,18 @@ const VirtualTryHero = () => {
             </Button>
           </div>
           <div className="relative w-full max-w-[400px]">
-            <ReactCompareImage
-              leftImage="/images/home/virtual-try/virtual-try-right.webp"
-              rightImage="/images/home/virtual-try/virtual-try-right.webp"
-              sliderLineColor="#d4af37"
-              leftImageCss={{ filter: "grayscale(100%)" }}
-            />
+            {mounted ? (
+              <Suspense fallback={<img src="/images/home/virtual-try/virtual-try-right.webp" alt="" className="w-full" />}>
+                <ReactCompareImage
+                  leftImage="/images/home/virtual-try/virtual-try-right.webp"
+                  rightImage="/images/home/virtual-try/virtual-try-right.webp"
+                  sliderLineColor="#d4af37"
+                  leftImageCss={{ filter: "grayscale(100%)" }}
+                />
+              </Suspense>
+            ) : (
+              <img src="/images/home/virtual-try/virtual-try-right.webp" alt="" className="w-full" />
+            )}
             <span className="absolute bottom-4 left-4 bg-black/40 backdrop-blur-md px-3 py-1 text-[10px] tracking-tighter uppercase">
               Before
             </span>
