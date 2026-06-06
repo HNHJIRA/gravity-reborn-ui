@@ -1,51 +1,36 @@
 import { useState, useEffect } from "react";
-import { TabsContent } from "@/components/ui/tabs";
 import { ParagraphText } from "../ui/text/paragraph-text";
 import { ShopCard } from "../ui/cards/shop-card";
 import { SlidersHorizontal, ShoppingBag } from "lucide-react";
+import { shopData } from "@/mock/shop-collection";
 
 export default function ShopCollectionContent({ activeCategory }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchProducts() {
-      try {
-        setLoading(true);
-        const res = await fetch("http://localhost:5000/api/orders/products");
-        if (!res.ok) {
-          throw new Error("Failed to load products");
-        }
-        const data = await res.json();
-        if (data.success) {
-          setProducts(data.products || []);
-        } else {
-          setProducts([]);
-        }
-      } catch (err) {
-        console.error("Fetch products error:", err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchProducts();
+    const timer = setTimeout(() => {
+      setProducts(shopData);
+      setLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
   }, []);
 
-  // Category normalizer matching frontend tabs with backend database categories
   const matchesCategory = (productCategory, activeTab) => {
     if (!productCategory) return false;
     if (activeTab === "ALL PIECES") return true;
-    
-    const normTab = activeTab.toLowerCase().replace(/s$/, ""); // e.g. "sherwanis" -> "sherwani"
+
+    const normTab = activeTab.toLowerCase().replace(/s$/, "");
     const normProd = productCategory.toLowerCase();
 
     if (normTab === "bridal lehenga") {
       return normProd.includes("lehenga") || normProd.includes("gharara");
     }
     if (normTab === "western suit") {
-      return normProd.includes("western");
+      return normProd.includes("western") || normProd.includes("tuxedo") || normProd.includes("suit") || normProd.includes("tailcoat");
+    }
+    if (normTab === "accessorie") {
+      return normProd.includes("accessorie");
     }
     return normProd.includes(normTab);
   };
