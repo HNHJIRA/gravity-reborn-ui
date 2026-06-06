@@ -36,26 +36,22 @@ const VirtualTryUpload = () => {
     const file = e.target.files[0];
     if (!file) return;
     setHumanImageFile(file);
-    setHumanImagePreview(URL.createObjectURL(file));
+    const preview = URL.createObjectURL(file);
+    setHumanImagePreview(preview);
 
-    // Upload to backend to get public URL
+    // Read as data URL so we have a portable reference for the try-on call
     setUploadingHuman(true);
-    const formData = new FormData();
-    formData.append("image", file);
     try {
-      const res = await fetch("http://localhost:5000/api/upload", {
-        method: "POST",
-        body: formData
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
       });
-      if (res.ok) {
-        const data = await res.json();
-        setHumanImageUrl(data.imageUrl);
-      } else {
-        alert("Failed to upload portrait.");
-      }
+      setHumanImageUrl(dataUrl);
     } catch (err) {
       console.error(err);
-      alert("Error uploading portrait.");
+      alert("Error reading portrait.");
     } finally {
       setUploadingHuman(false);
     }
