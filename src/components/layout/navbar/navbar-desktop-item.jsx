@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { usePathname } from "next/navigation";
+import { useLocation } from "@tanstack/react-router";
 
 export function NavbarDesktopItem({ item, isLast }) {
-  const pathname = usePathname();
+  const pathname = useLocation().pathname;
   const isActive = pathname === item.href;
 
   return (
