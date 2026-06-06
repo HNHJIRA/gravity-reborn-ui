@@ -1,15 +1,18 @@
 
 import React, { useState, useEffect, useRef } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { outfits } from "@/mock/virtual-try-data";
 import { ContainerWrapper } from "@/components/ui/wrapper/container-wrapper";
 import { SectionWrapper } from "@/components/ui/wrapper/section-wrapper";
 import { EyebrowText } from "@/components/ui/text/eye-brow-text";
 import { HeadingText } from "@/components/ui/text/heading-text";
+import { runVirtualTryOn } from "@/lib/tryon.functions";
 import UploadCard1 from "./upload-card1";
 import UploadCard2 from "./upload-card2";
 import UploadCard3 from "./upload-card3";
 
 const VirtualTryUpload = () => {
+  const tryOnFn = useServerFn(runVirtualTryOn);
   const [humanImageFile, setHumanImageFile] = useState(null);
   const [humanImagePreview, setHumanImagePreview] = useState(null);
   const [humanImageUrl, setHumanImageUrl] = useState(null);
@@ -72,25 +75,23 @@ const VirtualTryUpload = () => {
     setResultImage(null);
 
     try {
-      const res = await fetch("http://localhost:5000/api/fal/try-on", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const data = await tryOnFn({
+        data: {
           human_image_url: humanImageUrl,
           garment_image_url: selectedGarment.imageUrl,
-          description: `${selectedGarment.category || ""} ${selectedGarment.title || ""}`.trim()
-        })
+          description: `${selectedGarment.category || ""} ${selectedGarment.title || ""}`.trim(),
+        },
       });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        // Support both IDM-VTON (data.image.url) and FASHN-VTON (data.images[0].url)
-        const imageUrl = data.data.image?.url || data.data.images?.[0]?.url;
+      if (data.success) {
+        const imageUrl =
+          data.data?.image?.url || data.data?.images?.[0]?.url;
         setResultImage(imageUrl);
       } else {
         setError(data.error || "Failed to generate virtual try-on.");
       }
     } catch (err) {
-      setError("Network error communicating with the AI server.");
+      console.error(err);
+      setError(err?.message || "Network error communicating with the AI server.");
     } finally {
       setGenerating(false);
     }
