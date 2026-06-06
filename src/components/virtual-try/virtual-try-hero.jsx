@@ -1,12 +1,14 @@
 import { ArrowRight } from "lucide-react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { ContainerWrapper } from "../ui/wrapper/container-wrapper";
 import { SectionWrapper } from "../ui/wrapper/section-wrapper";
 import { EyebrowText } from "../ui/text/eye-brow-text";
 import { HeadingText } from "../ui/text/heading-text";
 import { ParagraphText } from "../ui/text/paragraph-text";
 import { Button } from "../ui/button";
-import ReactCompareImage from "react-compare-image";
 import VirtualTryIconCard from "./virtual-try-icon-card";
+
+const ReactCompareImage = lazy(() => import("react-compare-image"));
 
 const VirtualTryHero = () => {
   return (
