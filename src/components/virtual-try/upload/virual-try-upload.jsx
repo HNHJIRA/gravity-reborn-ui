@@ -12,6 +12,7 @@ import UploadCard2 from "./upload-card2";
 import UploadCard3 from "./upload-card3";
 
 const VirtualTryUpload = () => {
+  const tryOnFn = useServerFn(runVirtualTryOn);
   const [humanImageFile, setHumanImageFile] = useState(null);
   const [humanImagePreview, setHumanImagePreview] = useState(null);
   const [humanImageUrl, setHumanImageUrl] = useState(null);
