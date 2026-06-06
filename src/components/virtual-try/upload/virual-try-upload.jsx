@@ -133,6 +133,7 @@ const VirtualTryUpload = () => {
               canTryOn={!!humanImageUrl && !!selectedGarment}
             />
           </div>
+          <UploadCard4 resultImage={resultImage} />
         </ContainerWrapper>
       </SectionWrapper>
     </>
