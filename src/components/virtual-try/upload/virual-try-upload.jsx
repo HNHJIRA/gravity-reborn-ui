@@ -12,6 +12,19 @@ import UploadCard2 from "./upload-card2";
 import UploadCard3 from "./upload-card3";
 import UploadCard4 from "./upload-card4";
 
+const urlToDataUrl = async (url) => {
+  if (url.startsWith("data:")) return url;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch ${url}`);
+  const blob = await res.blob();
+  return await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+};
+
 const VirtualTryUpload = () => {
   const tryOnFn = useServerFn(runVirtualTryOn);
   const [humanImageFile, setHumanImageFile] = useState(null);
