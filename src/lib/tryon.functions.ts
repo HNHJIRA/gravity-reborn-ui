@@ -32,7 +32,7 @@ export const runVirtualTryOn = createServerFn({ method: "POST" })
       toDataUrl(data.garment_image_url),
     ]);
 
-    const prompt = `You are a virtual try-on assistant. The FIRST image is a person. The SECOND image is a garment (${data.description || "clothing item"}). Generate a single photorealistic image of the SAME person wearing this exact garment. Preserve the person's face, identity, body, pose, skin tone, and background. Only replace the relevant clothing item with the garment shown. The garment must match the style, color, pattern, and shape of the second image precisely. Output: one image only.`;
+    const prompt = `You are a virtual try-on assistant. The FIRST image is a person. The SECOND image is an outfit (${data.description || "clothing item"}) which may include a top, bottom (trousers/pants/skirt), or a full set. Generate a single photorealistic image of the SAME person wearing the EXACT outfit from the second image. If the garment image shows trousers/pants, replace the person's lower-body clothing with those trousers. If it shows a top, replace the upper-body clothing. If it shows a full outfit, replace both. Preserve the person's face, identity, hair, body proportions, pose, skin tone, lighting, and background exactly. Match the garment's color, pattern, texture, fit, and length precisely. Output: one image only.`;
 
     const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
