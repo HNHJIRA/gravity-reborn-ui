@@ -9,8 +9,38 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VirtualTryRouteImport } from './routes/virtual-try'
+import { Route as TheGroomPartyRouteImport } from './routes/the-groom-party'
+import { Route as ShopCollectionRouteImport } from './routes/shop-collection'
+import { Route as HeritageBlogRouteImport } from './routes/heritage-blog'
+import { Route as DesignLabRouteImport } from './routes/design-lab'
 import { Route as IndexRouteImport } from './routes/index'
 
+const VirtualTryRoute = VirtualTryRouteImport.update({
+  id: '/virtual-try',
+  path: '/virtual-try',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TheGroomPartyRoute = TheGroomPartyRouteImport.update({
+  id: '/the-groom-party',
+  path: '/the-groom-party',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopCollectionRoute = ShopCollectionRouteImport.update({
+  id: '/shop-collection',
+  path: '/shop-collection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HeritageBlogRoute = HeritageBlogRouteImport.update({
+  id: '/heritage-blog',
+  path: '/heritage-blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignLabRoute = DesignLabRouteImport.update({
+  id: '/design-lab',
+  path: '/design-lab',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +49,102 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/design-lab': typeof DesignLabRoute
+  '/heritage-blog': typeof HeritageBlogRoute
+  '/shop-collection': typeof ShopCollectionRoute
+  '/the-groom-party': typeof TheGroomPartyRoute
+  '/virtual-try': typeof VirtualTryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/design-lab': typeof DesignLabRoute
+  '/heritage-blog': typeof HeritageBlogRoute
+  '/shop-collection': typeof ShopCollectionRoute
+  '/the-groom-party': typeof TheGroomPartyRoute
+  '/virtual-try': typeof VirtualTryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/design-lab': typeof DesignLabRoute
+  '/heritage-blog': typeof HeritageBlogRoute
+  '/shop-collection': typeof ShopCollectionRoute
+  '/the-groom-party': typeof TheGroomPartyRoute
+  '/virtual-try': typeof VirtualTryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/design-lab'
+    | '/heritage-blog'
+    | '/shop-collection'
+    | '/the-groom-party'
+    | '/virtual-try'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/design-lab'
+    | '/heritage-blog'
+    | '/shop-collection'
+    | '/the-groom-party'
+    | '/virtual-try'
+  id:
+    | '__root__'
+    | '/'
+    | '/design-lab'
+    | '/heritage-blog'
+    | '/shop-collection'
+    | '/the-groom-party'
+    | '/virtual-try'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DesignLabRoute: typeof DesignLabRoute
+  HeritageBlogRoute: typeof HeritageBlogRoute
+  ShopCollectionRoute: typeof ShopCollectionRoute
+  TheGroomPartyRoute: typeof TheGroomPartyRoute
+  VirtualTryRoute: typeof VirtualTryRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/virtual-try': {
+      id: '/virtual-try'
+      path: '/virtual-try'
+      fullPath: '/virtual-try'
+      preLoaderRoute: typeof VirtualTryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/the-groom-party': {
+      id: '/the-groom-party'
+      path: '/the-groom-party'
+      fullPath: '/the-groom-party'
+      preLoaderRoute: typeof TheGroomPartyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop-collection': {
+      id: '/shop-collection'
+      path: '/shop-collection'
+      fullPath: '/shop-collection'
+      preLoaderRoute: typeof ShopCollectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/heritage-blog': {
+      id: '/heritage-blog'
+      path: '/heritage-blog'
+      fullPath: '/heritage-blog'
+      preLoaderRoute: typeof HeritageBlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/design-lab': {
+      id: '/design-lab'
+      path: '/design-lab'
+      fullPath: '/design-lab'
+      preLoaderRoute: typeof DesignLabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +157,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DesignLabRoute: DesignLabRoute,
+  HeritageBlogRoute: HeritageBlogRoute,
+  ShopCollectionRoute: ShopCollectionRoute,
+  TheGroomPartyRoute: TheGroomPartyRoute,
+  VirtualTryRoute: VirtualTryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
