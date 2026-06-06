@@ -11,7 +11,6 @@ import VirtualTryIconCard from "./virtual-try-icon-card";
 const ReactCompareImage = lazy(() => import("react-compare-image"));
 
 const VirtualTryHero = () => {
-const VirtualTryHero = () => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   return (
