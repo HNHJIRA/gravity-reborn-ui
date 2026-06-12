@@ -42,11 +42,12 @@ const UploadCard4 = ({ resultImage }) => {
     setPrevIdx(0);
     try {
       const res = await walkFn({ data: { image_url: resultImage } });
-      if (res.success) {
+      console.log("walkFn response", res);
+      if (res && res.success && Array.isArray(res.frames) && res.frames.length > 0) {
         setFrames(res.frames);
         setPlaying(true);
       } else {
-        setError(res.error || "Failed to generate walkaround.");
+        setError((res && res.error) || "Failed to generate walkaround. The server returned no frames.");
       }
     } catch (err) {
       console.error(err);
