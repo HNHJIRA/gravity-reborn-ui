@@ -4,8 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Google fonts: Inter + Cormorant Garamond */
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@100;300;400;500;600;700;800;900&display=swap");
+/* Google fonts loaded via <link> in src/routes/__root.tsx */
 
 /* Local fonts */
 @font-face {
