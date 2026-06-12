@@ -17,30 +17,53 @@ async function toDataUrl(src: string): Promise<string> {
   return `data:${contentType};base64,${b64}`;
 }
 
-const ANGLES = [
+// 8 frames simulating a person walking + camera orbiting around them.
+// Sequence: front pose → walking forward → 3/4 right → right profile walking →
+// 3/4 back → back walking away → 3/4 left → left profile pose → loops to front.
+const FRAMES = [
   {
-    key: "front",
+    key: "front-pose",
     prompt:
-      "Generate the SAME person wearing the SAME exact outfit, full body, standing naturally, photographed from the FRONT. Identical face, identical garment color/pattern/fit, identical background and lighting. Photorealistic.",
+      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from the FRONT, standing confidently with a slight model pose, one hand near hip. Identical face, identical garment color/pattern/fit, identical background and lighting. Cinematic fashion photography, photorealistic, sharp focus.",
   },
   {
-    key: "right",
+    key: "front-walk",
     prompt:
-      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from the RIGHT SIDE PROFILE (90° rotation). Identical face, identical garment color/pattern/fit, identical background and lighting. Photorealistic.",
+      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from the FRONT, mid-stride WALKING toward the camera, one leg forward, arms swinging naturally, hair with slight motion. Identical face, identical garment color/pattern/fit, identical background and lighting. Cinematic fashion runway, photorealistic, slight motion blur on limbs.",
   },
   {
-    key: "back",
+    key: "three-quarter-right",
     prompt:
-      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from BEHIND (back view, 180° rotation). Show the back of the garment in detail. Identical hair, identical garment color/pattern/fit, identical background and lighting. Photorealistic.",
+      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from a 3/4 FRONT-RIGHT angle (45°), mid-walk, body turning slightly right as the camera orbits around them. Identical face, identical garment, identical background and lighting. Cinematic, photorealistic.",
   },
   {
-    key: "left",
+    key: "right-profile",
     prompt:
-      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from the LEFT SIDE PROFILE (270° rotation). Identical face, identical garment color/pattern/fit, identical background and lighting. Photorealistic.",
+      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from the RIGHT SIDE PROFILE (90°), walking, mid-stride, showing the side silhouette of the garment. Identical face, identical garment, identical background and lighting. Cinematic runway photography, photorealistic.",
+  },
+  {
+    key: "three-quarter-back-right",
+    prompt:
+      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from a 3/4 BACK-RIGHT angle (135°), walking away from camera, showing the back-right of the garment. Identical hair, identical garment, identical background and lighting. Cinematic, photorealistic.",
+  },
+  {
+    key: "back-walking",
+    prompt:
+      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from BEHIND (180°), WALKING AWAY from camera, mid-stride, showing the full back of the garment in detail. Identical hair, identical garment color/pattern/fit, identical background and lighting. Cinematic runway, photorealistic.",
+  },
+  {
+    key: "three-quarter-back-left",
+    prompt:
+      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from a 3/4 BACK-LEFT angle (225°), walking, showing the back-left of the garment as the camera continues to orbit. Identical hair, identical garment, identical background and lighting. Cinematic, photorealistic.",
+  },
+  {
+    key: "left-profile-pose",
+    prompt:
+      "Generate the SAME person wearing the SAME exact outfit, full body, photographed from the LEFT SIDE PROFILE (270°), pausing in a confident model pose, looking toward the camera. Identical face, identical garment color/pattern/fit, identical background and lighting. Cinematic editorial fashion, photorealistic.",
   },
 ];
 
-async function generateAngle(key: string, prompt: string, imageDataUrl: string) {
+async function generateFrame(key: string, prompt: string, imageDataUrl: string) {
   const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -72,7 +95,7 @@ async function generateAngle(key: string, prompt: string, imageDataUrl: string) 
     message?.images?.[0]?.image_url?.url ||
     message?.images?.[0]?.url ||
     null;
-  if (!url) throw new Error("No image returned for angle");
+  if (!url) throw new Error("No image returned for frame");
   return url as string;
 }
 
@@ -88,10 +111,9 @@ export const generateWalkVideo = createServerFn({ method: "POST" })
       const dataUrl = await toDataUrl(data.image_url);
 
       const frames: string[] = [];
-      // Generate sequentially to avoid hitting rate limits
-      for (const a of ANGLES) {
+      for (const f of FRAMES) {
         try {
-          const url = await generateAngle(key, a.prompt, dataUrl);
+          const url = await generateFrame(key, f.prompt, dataUrl);
           frames.push(url);
         } catch (e: any) {
           const msg = String(e?.message || e);
@@ -101,12 +123,12 @@ export const generateWalkVideo = createServerFn({ method: "POST" })
           if (msg.includes("402")) {
             return { success: false, error: "AI credits exhausted. Add credits in Settings → Workspace → Usage." };
           }
-          console.error("angle failed", a.key, msg);
+          console.error("frame failed", f.key, msg);
         }
       }
 
       if (frames.length === 0) {
-        return { success: false, error: "Failed to generate any angle frames." };
+        return { success: false, error: "Failed to generate walkaround frames." };
       }
 
       return { success: true, frames };
