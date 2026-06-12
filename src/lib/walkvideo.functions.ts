@@ -111,27 +111,36 @@ export const generateWalkVideo = createServerFn({ method: "POST" })
       const dataUrl = await toDataUrl(data.image_url);
 
       const frames: string[] = [];
+      const errors: string[] = [];
       for (const f of FRAMES) {
         try {
           const url = await generateFrame(key, f.prompt, dataUrl);
           frames.push(url);
         } catch (e: any) {
           const msg = String(e?.message || e);
+          console.error("frame failed", f.key, msg);
+          errors.push(`${f.key}: ${msg.slice(0, 200)}`);
           if (msg.includes("429")) {
-            return { success: false, error: "Rate limit hit. Please wait a moment and try again." };
+            if (frames.length === 0) {
+              return { success: false, error: "Rate limit hit (429). Please wait ~30s and try again." };
+            }
+            break;
           }
           if (msg.includes("402")) {
             return { success: false, error: "AI credits exhausted. Add credits in Settings → Workspace → Usage." };
           }
-          console.error("frame failed", f.key, msg);
         }
+        await new Promise((r) => setTimeout(r, 300));
       }
 
       if (frames.length === 0) {
-        return { success: false, error: "Failed to generate walkaround frames." };
+        return {
+          success: false,
+          error: `Failed to generate walkaround frames. First error → ${errors[0] || "unknown"}`,
+        };
       }
 
-      return { success: true, frames };
+      return { success: true, frames, partial: frames.length < FRAMES.length };
     } catch (err: any) {
       console.error(err);
       return { success: false, error: err?.message || "Unknown error generating walkaround." };
