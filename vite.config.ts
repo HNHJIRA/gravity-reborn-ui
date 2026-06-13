@@ -22,7 +22,7 @@ export default defineConfig({
         "react/jsx-dev-runtime",
         "@tanstack/react-router",
         "@tanstack/react-query",
-        "@tanstack/react-start",
+        
         "@supabase/supabase-js",
         "lucide-react",
         "zod",
