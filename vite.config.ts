@@ -12,4 +12,21 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    optimizeDeps: {
+      include: [
+        "react",
+        "react-dom",
+        "react-dom/client",
+        "react/jsx-runtime",
+        "react/jsx-dev-runtime",
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@tanstack/react-start",
+        "@supabase/supabase-js",
+        "lucide-react",
+        "zod",
+      ],
+    },
+  },
 });
